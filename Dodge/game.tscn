@@ -1,0 +1,114 @@
+[gd_scene load_steps=7 format=3 uid="uid://b8p2xpjr3dad6"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_730hx"]
+[ext_resource type="PackedScene" uid="uid://cjnremd2j6enb" path="res://player.tscn" id="2_6sf5w"]
+[ext_resource type="FontFile" uid="uid://demnfyixww655" path="res://dodge_assets/fonts/Xolonium-Regular.ttf" id="3_4lpry"]
+[ext_resource type="AudioStream" uid="uid://cxib8mqtlxulr" path="res://dodge_assets/art/House In a Forest Loop.ogg" id="4_e3qc4"]
+[ext_resource type="AudioStream" uid="uid://y7ldnmjd36jp" path="res://dodge_assets/art/gameover.wav" id="5_4suqx"]
+
+[sub_resource type="Curve2D" id="Curve2D_4e7lt"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -18.8946, 0, 0, 0, 0, 0, 808.164, 5, 0, 0, 0, 0, 802.989, 801, 0, 0, 0, 0, -22, 804)
+}
+point_count = 4
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_730hx")
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." instance=ExtResource("2_6sf5w")]
+position = Vector2(187, 621)
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="EnemyPath" type="Path2D" parent="."]
+position = Vector2(20.2536, 0)
+scale = Vector2(0.966074, 1)
+curve = SubResource("Curve2D_4e7lt")
+metadata/_edit_lock_ = true
+
+[node name="EnemyLocation" type="PathFollow2D" parent="EnemyPath"]
+position = Vector2(-18.8946, 0)
+rotation = 0.00604545
+metadata/_edit_lock_ = true
+
+[node name="Enemys" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Start" type="Button" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -226.0
+offset_right = 96.0
+offset_bottom = -133.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_4lpry")
+theme_override_font_sizes/font_size = 70
+text = "Start"
+
+[node name="Score" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.5
+offset_right = 21.5
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_4lpry")
+theme_override_font_sizes/font_size = 60
+text = "0
+"
+
+[node name="HighScore" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 71.0
+offset_right = 295.0
+offset_bottom = 147.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_4lpry")
+theme_override_font_sizes/font_size = 60
+text = "High Score : 0"
+horizontal_alignment = 1
+
+[node name="Dodge" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -157.0
+offset_right = 396.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_4lpry")
+theme_override_font_sizes/font_size = 80
+text = "Dodge the Creeps!"
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_e3qc4")
+volume_db = 2.2
+
+[node name="Death" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_4suqx")
+volume_db = 3.4
+
+[connection signal="body_entered" from="Player" to="." method="_on_player_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="pressed" from="CanvasLayer/Start" to="." method="_on_start_pressed"]
